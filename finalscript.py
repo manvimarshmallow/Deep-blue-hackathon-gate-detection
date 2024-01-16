@@ -7,17 +7,12 @@ def decrease_contrast(image, gamma=0.5):
     gamma_corrected = np.power(image / 255.0, gamma) * 255.0
     gamma_corrected = np.uint8(gamma_corrected)
     return gamma_corrected
-def white_balance(image):
-    # Assume the image is in BGR color space
-    result = cv2.xphoto.createSimpleWB()
-    balanced_image = result.balanceWhite(image)
-    return balanced_image
+
 def preprocess(src, im_resize=1):
 
 
     im_dims = (int(src.shape[1]*im_resize), int(src.shape[0]*im_resize))
     if im_resize != 1.0:
-        src=white_balance(src)
         split = cv2.split(src)
         kernel = (3,3)
         sig = 1
@@ -143,14 +138,13 @@ def draw_bounding_box(image, lines, distance_threshold=400, iteration_counter=0)
                         pos = True
                     cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
                     cv2.circle(image, (center_x, center_y), 5, (0, 0, 255), -1)
-                    cv2.putText(image,str(center_x)+","+str(center_y),(center_x,center_y),cv2.FONT_HERSHEY_PLAIN,1,(255,255,255),1)
             except cv2.error as e:
                 print("Error in drawing bounding box:", e)
     return image, cropped_image, pos
 
 def main():
 
-    folder_path =  r"C:\Users\visha\Desktop\images"
+    folder_path = '/Users/manvibengani/Desktop/Deep-blue-hackathon-gate-detection/dataset'
 
     for path in os.listdir(folder_path):#loop to read one image at a time 
         image = os.path.join(folder_path, path)
